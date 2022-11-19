@@ -10,7 +10,7 @@ export interface friendDTO {
 }
 
 export interface friendOnlyDTO{
-    name: string;
+    name: string | false;
     isSupported: boolean;
 }
   

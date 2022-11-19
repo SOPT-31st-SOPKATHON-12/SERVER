@@ -39,5 +39,6 @@ model Support {
   supported Int
   supporter Int
   supportId Int  @id @unique @default(autoincrement())
+  recordId  Int?
   User      User @relation(fields: [supported], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "support_user_userid_fk_2")
 }

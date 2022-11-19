@@ -28,8 +28,9 @@ const getFriendRecord = async (req: Request, res: Response) => {
 //* 응원 생성
 const supportFriend = async (req: Request, res: Response) => {
     const userId = 1;
+    const {recordId} = req.body;
     const {friendId} = req.body;
-    const data = await friendService.supportFriend(userId, friendId);
+    const data = await friendService.supportFriend(userId, friendId, recordId);
 
     if (!data){
         return res.status(400).json({ status: 400, message: "친구 응원에 실패하였습니다."});
