@@ -20,7 +20,7 @@ model Friend {
   fir_user Int
   sec_user Int
   friendId Int  @id @unique @default(autoincrement())
-  User     User @relation(fields: [fir_user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_userid_fk")
+  User     User @relation(fields: [sec_user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_userid_fk")
 }
 
 model Record {

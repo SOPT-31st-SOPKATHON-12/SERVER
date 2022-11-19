@@ -1,47 +1,35 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { friendListDTO } from '../interfaces/friendListDTO';
 import { friendOnlyDTO } from '../interfaces/friendDTO';
 
 const getFriend = async (userId: number) => {
     const friendList = await prisma.friend.findMany({
         where: {
             OR: [
-                {fir_user: userId,},
-                {sec_user: userId,},
-            ],
-        },
+            {fir_user: userId,},
+            {sec_user: userId,},            
+            ]
+       },
+       include: {
+        User: {
+            select: {
+                name: true
+            }
+        }
+       }
     });
-    
-    // let returnList: friendOnlyDTO[] = [];
 
-    interface Friend {
-        fir_user: number;
-        sec_user: number;
-    }
-    
-    const returnList = friendList.map(async (friend:Friend) => {
+
+    const returnList = friendList.map((friend) => {
         let tempFriend : friendOnlyDTO = {
             name: false,
             isSupported: true
         };
-        const first_name = await getName(friend.fir_user);
-        const second_name = await getName(friend.sec_user);
-        console.log(first_name, second_name)
-
-        if (friend.fir_user == userId ){
-            tempFriend.name = second_name;
-            if (!getSupport(userId, friend.sec_user)){
-                tempFriend.isSupported = false;
-            }
-        } 
-        if (friend.sec_user == userId ) {
-            tempFriend.name = first_name;
-            if (!getSupport(userId, friend.fir_user)){
-                tempFriend.isSupported = false;
-            }
+        tempFriend.name = friend.User.name;
+        if (!getSupport(userId, friend.sec_user)){
+            tempFriend.isSupported = false;
         }
-        console.log(tempFriend)
+
         return tempFriend;
     })
 
@@ -79,7 +67,6 @@ const getSupport = async (userId: number, friendId: number) => {
             supported: friendId,
         },
     });
-    console.log(support);
     return support
 };
 
