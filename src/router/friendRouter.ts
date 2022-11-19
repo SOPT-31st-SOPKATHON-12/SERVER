@@ -3,11 +3,16 @@ import { friendController } from '../controller';
 
 const router: Router = Router();
 
-//* 응원 생성 ( POST /friend )
-//* 응원 조회 ( GET /friend )
+//* 친구 목록 조회 ( GET /friend )
 
 router.get('/', friendController.getFriend);
-router.get('/:userId', friendController.getFriendRecord);
+
+//* 친구 기록 조회 ( GET /friend/:friendId )
+
+router.get('/:friendId', friendController.getFriendRecord);
+
+//* 응원 생성 ( POST /friend/support )
+
 router.post('/support', friendController.supportFriend);
 
 export default router;
