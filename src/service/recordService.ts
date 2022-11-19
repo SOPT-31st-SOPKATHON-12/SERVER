@@ -5,12 +5,12 @@ const getRecord = async () => {};
 
 const putRecord = async () => {};
 
-const getFriendRecord = async () => {};
+const getMyReport = async () => {};
 
 const recordService = {
     getRecord,
     putRecord,
-    getFriendRecord,
+    getMyReport,
 };
 
 export default recordService;

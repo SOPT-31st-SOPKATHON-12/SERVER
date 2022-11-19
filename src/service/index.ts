@@ -1,5 +1,4 @@
 import recordService from './recordService';
-import reportService from './reportService';
-import supportService from './supportService';
+import friendService from './friendService';
 
-export { recordService, reportService, supportService };
+export { recordService, friendService };

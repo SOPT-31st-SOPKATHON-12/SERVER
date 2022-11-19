@@ -1,5 +1,4 @@
 import recordController from './recordController';
-import reportController from './reportController';
-import supportController from './supportController';
+import friendController from './friendController';
 
-export { recordController, reportController, supportController };
+export { recordController, friendController };

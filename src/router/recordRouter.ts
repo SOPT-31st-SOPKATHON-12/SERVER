@@ -12,8 +12,7 @@ router
 
 //* 친구 기록 조회 ( GET /record/friend ) - view 보고 확실히 결정
 
-router.get('/friend', recordController.getFriendRecord);
-
+router.get('/report', recordController.getMyReport);
 
 
 export default router;
