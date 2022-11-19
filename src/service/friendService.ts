@@ -74,6 +74,7 @@ const getSupport = async (userId: number, friendId: number) => {
             supported: friendId,
         },
     });
+    console.log(support);
     return support
 };
 
@@ -85,7 +86,23 @@ const supportFriend = async (userId: number, friendId: number, recordId:number) 
             recordId: recordId,
         },
     });
+    const liked = await prisma.support.findMany({
+        where: {
+            recordId: recordId,
+        }
+    });
 
+    const liked_cnt = liked.length
+
+    const support_cnt = await prisma.record.update({
+        where: {
+            recordId: recordId,
+        },
+        data: {
+            support_cnt: liked_cnt,
+        }
+    })
+    
     return support;
 };
 
