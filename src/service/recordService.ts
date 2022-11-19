@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const getRecord = async (userId:number) => {
     const today = new Date().toDateString();
-    const recordList = await prisma.Record.findMany({
+    const recordList = await prisma.record.findMany({
         where: {
             user: userId,
         },
@@ -22,8 +22,8 @@ const getRecord = async (userId:number) => {
   return data;
 };
 
-const putRecord = async (userId:number, satisfy:number, color:number, strength:number) => {
-    const record = await prisma.Record.create({
+const putRecord = async (userId:number, satisfy:boolean, color:number, strength:number) => {
+    const record = await prisma.record.create({
         data:{
             user: userId,
             satisfy,
@@ -40,7 +40,7 @@ const putRecord = async (userId:number, satisfy:number, color:number, strength:n
 const getMyReport = async (userId: number) => {
     const today = new Date();
 
-    const recordList = await prisma.Record.findMany({
+    const recordList = await prisma.record.findMany({
         where: {
             user: userId,
         },
