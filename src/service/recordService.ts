@@ -9,7 +9,7 @@ const getRecord = async (userId:number) => {
         },
     });
     
-    const data = recordList.reduce((acc,cur)=>{
+    const data = recordList.reduce((acc:any,cur:any)=>{
         const date = cur.date.toDateString();
         
         if(date === today){
@@ -46,7 +46,7 @@ const getMyReport = async (userId: number) => {
         },
     });
 
-    const recentRecord = recordList.reduce((acc,cur)=>{
+    const recentRecord = recordList.reduce((acc:any,cur:any)=>{
         const date = cur.date;
         
         if((today.getDate() - date.getDate()) < 7){
@@ -60,7 +60,7 @@ const getMyReport = async (userId: number) => {
     const strength = [0,0,0];
     const color = [0,0,0,0,0];
 
-    recentRecord.forEach((el)=>{
+    recentRecord.forEach((el:any)=>{
         el.satisfy ? satisfy[0] += 1 : satisfy[1] += 1;
         strength[el.strength-1] += 1;
         color[el.color-1] += 1;
