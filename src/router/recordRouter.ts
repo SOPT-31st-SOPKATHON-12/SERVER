@@ -4,8 +4,8 @@ import { recordController } from '../controller';
 const router: Router = Router();
 
 router
-.post('/:userId', recordController.putRecord)
-.get('/:userId', recordController.getRecord)
+.post('/', recordController.putRecord)
+.get('/', recordController.getRecord)
 .get('/report', recordController.getMyReport);
 
 
