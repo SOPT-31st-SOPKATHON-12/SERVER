@@ -15,7 +15,12 @@ const getFriend = async (userId: number) => {
     
     // let returnList: friendOnlyDTO[] = [];
 
-    const returnList = friendList.map(async (friend) => {
+    interface Friend {
+        fir_user: number;
+        sec_user: number;
+    }
+    
+    const returnList = friendList.map(async (friend:Friend) => {
         let tempFriend : friendOnlyDTO = {
             name: false,
             isSupported: true
