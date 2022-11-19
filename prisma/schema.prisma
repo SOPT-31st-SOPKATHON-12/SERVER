@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId  Int       @id @default(autoincrement())
+  name    String    @db.VarChar(10)
+  Friend  Friend[]
+  Record  Record[]
+  Support Support[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model Friend {
+  fir_user Int
+  sec_user Int
+  friendId Int  @id @unique @default(autoincrement())
+  User     User @relation(fields: [fir_user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_userid_fk")
+}
+
+model Record {
+  recordId    Int      @id @default(autoincrement())
+  user        Int
+  satisfy     Boolean
+  color       Int?
+  strength    Int?
+  support_cnt Int      @default(0)
+  date        DateTime @db.Timestamp(6)
+  User        User     @relation(fields: [user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "record_user_userid_fk")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model Support {
+  supported Int
+  supporter Int
+  supportId Int  @id @unique @default(autoincrement())
+  User      User @relation(fields: [supported], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "support_user_userid_fk_2")
+}
