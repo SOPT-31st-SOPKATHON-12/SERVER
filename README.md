@@ -95,7 +95,7 @@ Git Flow 방식
            💛 박서원 💛
         </td>
         <td>
-           support, report API 구현
+           friend Router API 구현
         </td>
     </tr>
     <tr align="center">
