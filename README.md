@@ -3,6 +3,8 @@
 ### 서비스 한줄 소개
 나의 변의 상태를 체크하고, 친구에게 배변 활동을 응원받고, 변의 변화를 주간 리포트로 확인한다.
 
+### BASE URL : 52.78.182.200:8000
+
 ### API
 명세서: <a href="https://apriljam.notion.site/53378f4a8b4e44c39a028ae9c3181608?v=333629a940d64a66826fdd61163cf3fb">확인하기</a>
 
@@ -12,21 +14,82 @@
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
  <img src="https://img.shields.io/badge/postgresql-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
 
-### 사용 라이브러리
+### package.json
 
 ```json
-"dependencies": {
-  "@prisma/client": "^4.6.0",
-  "express": "^4.18.2",
-  "prisma": "^4.6.0",
-  "typescript-rest": "^3.0.4"
-},
-"devDependencies": {
-  "@types/express": "^4.17.14",
-  "@types/node": "^18.11.9",
-  "nodemon": "^2.0.20",
-  "prettier": "2.7.1"
+"name": "mcdelivery",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "tsc && node dist",
+        "db:pull": "npx prisma db pull",
+        "db:push": "npx prisma db push",
+        "generate": "npx prisma generate"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.6.0",
+        "express": "^4.18.2",
+        "moment": "^2.29.4",
+        "prisma": "^4.6.0",
+        "typescript-rest": "^3.0.4"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.14",
+        "@types/node": "^18.11.9",
+        "nodemon": "^2.0.20",
+        "prettier": "2.7.1"
+    }
+```
+
+### schema
+```
+generator client {
+  provider = "prisma-client-js"
 }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId  Int       @id @default(autoincrement())
+  name    String    @db.VarChar(10)
+  Friend  Friend[]
+  Record  Record[]
+  Support Support[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model Friend {
+  fir_user Int
+  sec_user Int
+  friendId Int  @id @unique @default(autoincrement())
+  User     User @relation(fields: [sec_user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "friend_user_userid_fk")
+}
+
+model Record {
+  recordId    Int      @id @default(autoincrement())
+  user        Int
+  satisfy     Boolean
+  color       Int?
+  strength    Int?
+  support_cnt Int      @default(0)
+  date        DateTime @db.Timestamp(6)
+  User        User     @relation(fields: [user], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "record_user_userid_fk")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model Support {
+  supported Int
+  supporter Int
+  supportId Int  @id @unique @default(autoincrement())
+  recordId  Int?
+  User      User @relation(fields: [supported], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "support_user_userid_fk_2")
+}
+
 ```
 
 ### Code convention
@@ -67,23 +130,22 @@ Git Flow 방식
 ```
 ./src
 ├── controller
+│   ├── friendController.ts
 │   ├── index.ts
-│   ├── recordController.ts
-│   ├── reportController.ts
-│   └── supportController.ts
+│   └── recordController.ts
 ├── index.ts
 ├── interfaces
+│   ├── RecordDTO.ts
+│   ├── friendDTO.ts
+│   └── friendListDTO.ts
 ├── router
+│   ├── friendRouter.ts
 │   ├── index.ts
-│   ├── recordRouter.ts
-│   ├── reportRouter.ts
-│   └── supportRouter.ts
+│   └── recordRouter.ts
 └── service
+    ├── friendService.ts
     ├── index.ts
-    ├── recordService.ts
-    ├── reportService.ts
-    └── supportService.ts
-
+    └── recordService.ts
 
 ```
 
@@ -108,5 +170,9 @@ Git Flow 방식
     </tr>
 </table>
 
+### ERD
+<img width="570" alt="스크린샷 2022-11-20 오전 6 18 42" src="https://user-images.githubusercontent.com/67372977/202872001-7117df7b-62ca-4bd0-80d3-faa11322282f.png">
 
-<!-- ### Server Architecture -->
+### Server Architecture
+![KakaoTalk_Photo_2022-11-20-06-25-03](https://user-images.githubusercontent.com/67372977/202872172-fa636121-a6d7-4e79-83fd-40dbe8407b93.png)
+
